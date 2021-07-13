@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react'
-import { Dialog, Button, Classes, Menu, MenuItem } from '@blueprintjs/core'
+import { Dialog, Button, Classes, Menu, MenuItem, Intent } from '@blueprintjs/core'
 import { Popover2 } from '@blueprintjs/popover2'
 import { notify, EToastType } from '../components/shared/toasts'
 import Wallet from '@project-serum/sol-wallet-adapter'
@@ -11,7 +11,7 @@ import {
 } from '../wallet-adapters'
 // import { useLocalStorageState } from './utils'
 import { WalletAdapter } from '../wallet-adapters/types'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import { walletState, connectionState } from '../recoil/exchangeState'
 
 const ASSET_URL = 'https://cdn.jsdelivr.net/gh/solana-labs/oyster@main/assets/wallets'
@@ -158,12 +158,13 @@ const WalletSelect = () => {
           placement="right-end"
         >
           <Button
+            intent={Intent.PRIMARY}
             icon="user"
             text={wallet?.publicKey ? `${wallet?.publicKey.toBase58().slice(0, 8)}...` : 'Connecting...'}
           />
         </Popover2>
       ) : (
-        <Button onClick={onClick} text="Login" icon="log-in" />
+        <Button intent={Intent.PRIMARY} onClick={onClick} text="Login" rightIcon="log-in" />
       )}
       <Dialog
         className="bp3-dark"

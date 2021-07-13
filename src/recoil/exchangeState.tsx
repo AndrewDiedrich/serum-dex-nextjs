@@ -1,4 +1,6 @@
 import { atom, selector } from 'recoil'
+import classNames from 'classnames'
+import { Classes } from '@blueprintjs/core'
 import { Connection } from '@solana/web3.js'
 import { WalletState, ConnectionState, PreferencesState, MarketState } from '../utils/types'
 import { Market } from '@project-serum/serum'
@@ -59,7 +61,12 @@ export const preferencesState = atom({
   default: {} as PreferencesState,
 })
 
-export const darkModeState = atom({
-  key: 'darkModeState', // unique ID (with respect to other atoms/selectors)
-  default: true,
+export const THEMES = {
+  Dark: classNames('mosaic-blueprint-theme', Classes.DARK),
+  Light: 'mosaic-blueprint-theme',
+}
+
+export const themeState = atom({
+  key: 'themeState', // unique ID (with respect to other atoms/selectors)
+  default: THEMES.Dark,
 })

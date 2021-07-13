@@ -1,10 +1,11 @@
-import { Classes, HTMLSelect, Button } from '@blueprintjs/core'
+import { Classes, HTMLSelect, Button, Menu, MenuItem } from '@blueprintjs/core'
 import classNames from 'classnames'
 import dropRight from 'lodash/dropRight'
 import React, { useState } from 'react'
 import RecentTrades from '../../RecentTrades'
 import MarketInfo from '../../MarketInfo'
-
+import { useRecoilState } from 'recoil'
+import { themeState, THEMES } from '../../../../recoil/exchangeState'
 import {
   Corner,
   createBalancedTreeFromLeaves,
@@ -20,51 +21,60 @@ import {
   MosaicZeroState,
   updateTree,
 } from 'react-mosaic-component'
-
-import { CloseAdditionalControlsButton } from './CloseAdditionalControlsButton'
+// import { CloseAdditionalControlsButton } from './CloseAdditionalControlsButton'
+import { Popover2 } from '@blueprintjs/popover2'
 
 let windowCount = 3
 
-export const THEMES = {
-  ['Blueprint']: 'mosaic-blueprint-theme',
-  ['Blueprint Dark']: classNames('mosaic-blueprint-theme', Classes.DARK),
-  ['None']: '',
+enum ViewId {
+  RECENT_TRADES = 'Recent Trades',
+  ORDERBOOK = 'Orderbook',
+  ORDER_EXEC = 'Submit Orders',
+  CHART = 'Chart',
+  DEPTH_CHART = 'Depth Chart',
 }
 
-export type Theme = keyof typeof THEMES
-
-// const additionalControls = React.Children.toArray([<CloseAdditionalControlsButton key={1} />])
-const additionalControls = React.Children.toArray([<CloseAdditionalControlsButton key={1} />])
-
-const EMPTY_ARRAY: any[] = []
-
-export interface ExampleAppState {
-  currentNode: MosaicNode<number> | null
-  currentTheme: Theme
-}
+const components = ['Recent Trades', 'Orderbook', 'Submit Orders', 'Chart', 'Depth Chart']
 
 const Desktop = (): JSX.Element => {
-  const [theme, setTheme] = useState(THEMES['Blueprint Dark'])
-  const [currentNode, setCurrentNode] = useState<MosaicNode<number> | null>({
+  const [theme, setTheme] = useRecoilState(themeState)
+  const [currentNode, setCurrentNode] = useState<MosaicNode<ViewId> | null>({
     direction: 'row',
-    first: 1,
+    first: ViewId.RECENT_TRADES,
     second: {
       direction: 'column',
-      first: 2,
-      second: 3,
+      first: ViewId.CHART,
+      second: ViewId.ORDER_EXEC,
     },
     splitPercentage: 40,
   })
 
-  const onChange = (currentNode: MosaicNode<number> | null) => {
+  const onChange = (currentNode: MosaicNode<ViewId> | null) => {
+    console.log('onchange mf', currentNode)
     setCurrentNode(currentNode)
   }
 
-  const onRelease = (currentNode: MosaicNode<number> | null) => {
+  const onRelease = (currentNode: MosaicNode<ViewId> | null) => {
     console.log('Mosaic.onRelease():', currentNode)
   }
 
-  const createNode = () => ++windowCount
+  // const WindowOptions = () => {
+  //   return (
+  //     <Popover2
+  //       content={
+  //         <Menu>
+  //           {components.map((comp: string) => (
+  //             <menuitem onClick={() => createNode(comp)} key={comp} title={comp} />
+  //           ))}
+  //         </Menu>
+  //       }
+  //     >
+  //       <Button icon="add-location" />
+  //     </Popover2>
+  //   )
+  // }
+
+  const createNode = (id: string) => id
 
   const autoArrange = () => {
     const leaves = getLeaves(currentNode)
@@ -75,12 +85,12 @@ const Desktop = (): JSX.Element => {
     let letCurrentNode = currentNode
     if (currentNode) {
       const path = getPathToCorner(letCurrentNode, Corner.TOP_RIGHT)
-      const parent = getNodeAtPath(letCurrentNode, dropRight(path)) as MosaicParent<number>
-      const destination = getNodeAtPath(letCurrentNode, path) as MosaicNode<number>
+      const parent = getNodeAtPath(letCurrentNode, dropRight(path)) as MosaicParent<ViewId>
+      const destination = getNodeAtPath(letCurrentNode, path) as MosaicNode<ViewId>
       const direction: MosaicDirection = parent ? getOtherDirection(parent.direction) : 'row'
 
-      let first: MosaicNode<number>
-      let second: MosaicNode<number>
+      let first: MosaicNode<ViewId>
+      let second: MosaicNode<ViewId>
       if (direction === 'row') {
         first = destination
         second = ++windowCount
@@ -116,14 +126,15 @@ const Desktop = (): JSX.Element => {
             Market:
             <MarketInfo />
           </label>
+          <div className="navbar-separator" />
           <label className={classNames('theme-selection', Classes.LABEL, Classes.INLINE)}>
             Theme:
-            <HTMLSelect value={theme} onChange={(e) => setTheme(e.currentTarget.value as Theme)}>
+            <HTMLSelect value={theme} onChange={(e) => setTheme(e.currentTarget.value)}>
               {React.Children.toArray(Object.keys(THEMES).map((label) => <option key={label}>{label}</option>))}
             </HTMLSelect>
           </label>
           <div className="navbar-separator" />
-          <span className="actions-label">Example Actions:</span>
+
           <Button icon="grid-view" onClick={autoArrange}>
             Auto Arrange
           </Button>
@@ -135,26 +146,37 @@ const Desktop = (): JSX.Element => {
     )
   }
 
+  const componetSwitch = (id: ViewId) => {
+    switch (id) {
+      case ViewId.RECENT_TRADES:
+        return <RecentTrades />
+
+      default:
+        break
+    }
+  }
+
   return (
     <div className="react-mosaic-example-app">
       <div>{renderNavBar()}</div>
-      <Mosaic<number>
-        renderTile={(count, path) => (
-          <MosaicWindow<number>
-            additionalControls={count === 3 ? additionalControls : EMPTY_ARRAY}
-            title={`Window ${count}`}
-            createNode={createNode}
-            path={path}
-            onDragStart={() => console.log('MosaicWindow.onDragStart')}
-            onDragEnd={(type) => console.log('MosaicWindow.onDragEnd', type)}
-            renderToolbar={count === 2 ? () => <div className="toolbar-example">Custom Toolbar</div> : null}
-          >
-            <div className="example-window">
-              <h1>{`Window ${count}`}</h1>
-              <RecentTrades />
-            </div>
-          </MosaicWindow>
-        )}
+      <Mosaic<ViewId>
+        renderTile={(id, path) => {
+          console.log(id, path)
+          return (
+            <MosaicWindow<ViewId>
+              // additionalControls={id === 3 ? additionalControls : EMPTY_ARRAY}
+              // toolbarControls={createNode()}
+              title={`${id}`}
+              createNode={() => createNode(id)}
+              path={path}
+              onDragStart={() => console.log('MosaicWindow.onDragStart')}
+              onDragEnd={(type) => console.log('MosaicWindow.onDragEnd', type)}
+              // renderToolbar={() => <div className="toolbar-example">Custom Toolbar</div>}
+            >
+              <div className="example-window">{componetSwitch(id)}</div>
+            </MosaicWindow>
+          )
+        }}
         zeroStateView={<MosaicZeroState createNode={createNode} />}
         value={currentNode}
         onChange={onChange}

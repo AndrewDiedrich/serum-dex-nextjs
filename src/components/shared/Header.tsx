@@ -1,26 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import Link from 'next/link'
-import {
-  Button,
-  Menu,
-  MenuItem,
-  NavbarGroup,
-  Navbar,
-  H4,
-  Alignment,
-  NavbarHeading,
-  Position,
-  Icon,
-  AnchorButton,
-} from '@blueprintjs/core'
+import { Button, Menu, MenuItem, NavbarGroup, Navbar, H4, Alignment, NavbarHeading, Position } from '@blueprintjs/core'
 import { Popover2 } from '@blueprintjs/popover2'
 import WalletSelect from '../../utils/WalletSelect'
-import { useRecoilState } from 'recoil'
-import { darkModeState } from '../../recoil/exchangeState'
 
 const Header = (): JSX.Element => {
-  const [darkMode, setDarkMode] = useRecoilState(darkModeState)
-
   const exchangeMenu = (
     <Menu>
       <Link href="/exchange">
@@ -45,23 +29,11 @@ const Header = (): JSX.Element => {
             Trade
           </Button>
         </Popover2>
-
-        <AnchorButton minimal href="/issuance/user">
-          Issuance
-        </AnchorButton>
-
-        <AnchorButton minimal href="/issuance/tokensales">
-          Token Sales
-        </AnchorButton>
-
         <Link href="/statistics">
           <Button rightIcon="graph" minimal>
-            Statistics
+            Analyze
           </Button>
         </Link>
-        <div onClick={() => setDarkMode(!darkMode)}>
-          <Icon icon="moon" />
-        </div>
       </NavbarGroup>
       <NavbarGroup align={Alignment.RIGHT}>
         <WalletSelect />
