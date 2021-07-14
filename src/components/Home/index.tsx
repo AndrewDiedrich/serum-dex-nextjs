@@ -1,10 +1,23 @@
-import { HTMLTable } from '@blueprintjs/core'
-import { useMarkPrice } from '../../utils/markets'
+import { H1, Button, Intent } from '@blueprintjs/core'
+import Link from 'next/link'
+import MarketHighlights from './MarketHighlights/indext'
+import MarketTable from './MarketTable'
 
 const Markets = () => {
-  const price = useMarkPrice()
-  console.log('price', price)
-  return <HTMLTable>{price}</HTMLTable>
+  return (
+    <div style={{ textAlign: 'center' }}>
+      <div style={{}}>
+        <H1>SpotLight</H1>
+        <Link href="/exchange/solusd">
+          <Button intent={Intent.PRIMARY} rightIcon="timeline-area-chart">
+            Exchange
+          </Button>
+        </Link>
+      </div>
+      <MarketHighlights />
+      <MarketTable />
+    </div>
+  )
 }
 
 export default Markets
