@@ -21,35 +21,45 @@ import {
   MosaicZeroState,
   updateTree,
 } from 'react-mosaic-component'
+import OrderExec from '../../OrderExec'
 // import { CloseAdditionalControlsButton } from './CloseAdditionalControlsButton'
 import { Popover2 } from '@blueprintjs/popover2'
 
-let windowCount = 3
-
-enum ViewId {
-  RECENT_TRADES = 'Recent Trades',
-  ORDERBOOK = 'Orderbook',
-  ORDER_EXEC = 'Submit Orders',
-  CHART = 'Chart',
-  DEPTH_CHART = 'Depth Chart',
-}
-
-const components = ['Recent Trades', 'Orderbook', 'Submit Orders', 'Chart', 'Depth Chart']
-
 const Desktop = (): JSX.Element => {
+  /**
+   * Set Mosiac map up
+   */
+  const ViewMap = new Map()
+  enum ViewId {
+    RECENT_TRADES = 'Recent Trades',
+    ORDERBOOK = 'Orderbook',
+    ORDER_EXEC = 'Submit Orders',
+    CHART = 'Chart',
+    DEPTH_CHART = 'Depth Chart',
+    ORDERS = 'Orders',
+  }
+  ViewMap.set(ViewId.CHART, 1)
+  ViewMap.set(ViewId.ORDERS, 1)
+  ViewMap.set(ViewId.ORDER_EXEC, 1)
+  ViewMap.set(ViewId.RECENT_TRADES, 1)
+
   const [theme, setTheme] = useRecoilState(themeState)
-  const [currentNode, setCurrentNode] = useState<MosaicNode<ViewId> | null>({
+  const [currentNode, setCurrentNode] = useState<MosaicNode<ViewId>>({
     direction: 'row',
-    first: ViewId.RECENT_TRADES,
-    second: {
+    first: {
       direction: 'column',
       first: ViewId.CHART,
-      second: ViewId.ORDER_EXEC,
+      second: ViewId.RECENT_TRADES,
+    },
+    second: {
+      direction: 'column',
+      first: ViewId.ORDER_EXEC,
+      second: ViewId.ORDERS,
     },
     splitPercentage: 40,
   })
 
-  const onChange = (currentNode: MosaicNode<ViewId> | null) => {
+  const onChange = (currentNode: MosaicNode<ViewId>) => {
     console.log('onchange mf', currentNode)
     setCurrentNode(currentNode)
   }
@@ -81,7 +91,7 @@ const Desktop = (): JSX.Element => {
 
     setCurrentNode(createBalancedTreeFromLeaves(leaves))
   }
-  const addToTopRight = () => {
+  const addToTopRight = (component: ViewId) => {
     let letCurrentNode = currentNode
     if (currentNode) {
       const path = getPathToCorner(letCurrentNode, Corner.TOP_RIGHT)
@@ -93,9 +103,9 @@ const Desktop = (): JSX.Element => {
       let second: MosaicNode<ViewId>
       if (direction === 'row') {
         first = destination
-        second = ++windowCount
+        second = component
       } else {
-        first = ++windowCount
+        first = component
         second = destination
       }
 
@@ -112,7 +122,7 @@ const Desktop = (): JSX.Element => {
         },
       ])
     } else {
-      letCurrentNode = ++windowCount
+      letCurrentNode = component
     }
 
     setCurrentNode({ letCurrentNode })
@@ -150,7 +160,8 @@ const Desktop = (): JSX.Element => {
     switch (id) {
       case ViewId.RECENT_TRADES:
         return <RecentTrades />
-
+      case ViewId.ORDER_EXEC:
+        return <OrderExec />
       default:
         break
     }

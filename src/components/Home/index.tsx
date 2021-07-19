@@ -1,6 +1,6 @@
 import { H1, Button, Intent } from '@blueprintjs/core'
 import Link from 'next/link'
-import MarketHighlights from './MarketHighlights/indext'
+import MarketHighlights from './MarketHighlights'
 import MarketTable from './MarketTable'
 
 const Markets = () => {

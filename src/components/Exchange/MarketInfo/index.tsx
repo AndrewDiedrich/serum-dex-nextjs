@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import { exchangeMarketState, availableMarketsState } from '../../../recoil/exchangeState'
 import { MarketInfo } from '../../../utils/types'
-import { Button, MenuItem, Card, H3 } from '@blueprintjs/core'
+import { Button, MenuItem, Card, H3, Intent } from '@blueprintjs/core'
 import { Select, ItemPredicate, ItemRenderer } from '@blueprintjs/select'
 
 export enum ESides {
@@ -79,7 +79,7 @@ const Orderbook = () => {
       noResults={<MenuItem disabled={true} text="No results." />}
       onItemSelect={handleMarketChange}
     >
-      <Button text={market ? `${market.name}` : '(No selection)'} />
+      <Button intent={Intent.PRIMARY} text={market ? `${market.name}` : '(No selection)'} />
     </FromSelect>
   )
 }
