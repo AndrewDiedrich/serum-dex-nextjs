@@ -53,10 +53,10 @@ const RecentTrades = () => {
             }
           >
             <td>
-              {row.price}
+              {row.price.toFixed(4)}
               {change !== 0 ? (
                 <span style={{ paddingLeft: '10px', textAlign: 'right' }}>
-                  {row.side === 'buy' ? (
+                  {row.side === 'sell' ? (
                     <Icon icon="caret-up" color="#4aa529" />
                   ) : (
                     <Icon icon="caret-down" color="#db3737" />

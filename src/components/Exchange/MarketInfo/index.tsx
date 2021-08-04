@@ -30,8 +30,8 @@ const Orderbook = () => {
   const [markets] = useRecoilState(availableMarketsState)
   useEffect(() => {
     console.log('markets from list')
-    console.log('market change', market)
-  }, [])
+    console.log('market change', markets)
+  }, [markets])
 
   const renderMarkets: ItemRenderer<MarketInfo> = (market, { handleClick, modifiers }) => {
     if (!modifiers.matchesPredicate) {
