@@ -1,0 +1,19 @@
+@import "~@blueprintjs/core/lib/scss/variables";
+
+.recent-order-row {
+  &-sell td:first-child {
+    border-left: 10px solid $red3;
+    background-color: rgba($color: $red2, $alpha: 0.5);
+  }
+  &-buy td:first-child {
+    border-left: 10px solid $green3;
+    background-color: rgba($color: $green2, $alpha: 0.5);
+  }
+
+  .size-ask {
+    color: $red3 !important;
+  }
+  .size-bid {
+    color: $green3 !important;
+  }
+}

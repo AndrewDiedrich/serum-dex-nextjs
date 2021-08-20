@@ -4,6 +4,8 @@ import dropRight from 'lodash/dropRight'
 import React, { useState } from 'react'
 import RecentTrades from '../../RecentTrades'
 import MarketInfo from '../../MarketInfo'
+import Orders from '../../Orders'
+import Charts from '../../Charts'
 import { useRecoilState } from 'recoil'
 import { themeState, THEMES } from '../../../../recoil/exchangeState'
 import {
@@ -21,7 +23,7 @@ import {
   MosaicZeroState,
   updateTree,
 } from 'react-mosaic-component'
-import OrderExec from '../../OrderExec'
+import Orderbook from '../../Orderbook'
 // import { CloseAdditionalControlsButton } from './CloseAdditionalControlsButton'
 import { Popover2 } from '@blueprintjs/popover2'
 
@@ -161,7 +163,11 @@ const Desktop = (): JSX.Element => {
       case ViewId.RECENT_TRADES:
         return <RecentTrades />
       case ViewId.ORDER_EXEC:
-        return <OrderExec />
+        return <Orderbook />
+      case ViewId.ORDERS:
+        return <Orders />
+      case ViewId.CHART:
+        return <Charts />
       default:
         break
     }

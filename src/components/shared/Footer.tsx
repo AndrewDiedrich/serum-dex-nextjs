@@ -2,7 +2,7 @@ import { Divider, Card } from '@blueprintjs/core'
 
 const Footer = () => {
   return (
-    <Card className="footer">
+    <Card className="footer bp3-dark" style={{ borderRadius: 0 }}>
       <div className="flex-row wrapper">
         <div className="flex-column">
           <div className="flex-row">

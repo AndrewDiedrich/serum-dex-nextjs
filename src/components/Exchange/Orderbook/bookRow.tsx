@@ -1,5 +1,5 @@
-import { commaNum } from '../../../utils/numberFormaters'
-import { IBookSide } from './'
+import { commaNum } from '../../shared/numberFormaters'
+import { IBookSide } from '.'
 
 const BookRow = (props: { index: number; row: IBookSide; side: string; widthPercent: number; color: string }) => {
   return (
@@ -12,8 +12,6 @@ const BookRow = (props: { index: number; row: IBookSide; side: string; widthPerc
       }}
       className={props.side === 'bids' ? 'blinkPositiveValue' : 'blinkNegativeValue mt-1 mb-1'}
     >
-      <td className="orderbook-user-order">-</td>
-
       <td className={props.side === 'bids' ? 'orderbook-market-row-price-bids' : 'orderbook-market-row-price-asks'}>
         {commaNum(props.row.price)}
       </td>

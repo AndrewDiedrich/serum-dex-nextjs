@@ -1,0 +1,37 @@
+$levels: 12;
+
+@mixin margin-left-list {
+  @for $i from 1 through $levels {
+    .ml-#{$i} {
+      margin-left: $i * 2px;
+    }
+  }
+}
+@include margin-left-list;
+
+@mixin margin-right-list {
+  @for $i from 1 through $levels {
+    .mr-#{$i} {
+      margin-right: $i * 2px;
+    }
+  }
+}
+@include margin-right-list;
+
+@mixin margin-top-list {
+  @for $i from 1 through $levels {
+    .mt-#{$i} {
+      margin-top: $i * 2px;
+    }
+  }
+}
+@include margin-top-list;
+
+@mixin margin-bottom-list {
+  @for $i from 1 through $levels {
+    .mb-#{$i} {
+      margin-bottom: $i * 2px;
+    }
+  }
+}
+@include margin-bottom-list;

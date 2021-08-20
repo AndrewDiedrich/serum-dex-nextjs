@@ -40,6 +40,7 @@ const RecentTrades = () => {
   }, [contentRef.current?.parentElement?.clientHeight])
 
   const renderTableRows = () => {
+    console.log(rows)
     return rows ? (
       rows.slice(0, 20).map((row: BonfidaTrade, index: number) => {
         const change = index !== rows.length - 1 ? row.price - rows[index + 1].price : 0
@@ -52,11 +53,11 @@ const RecentTrades = () => {
                 : 'blinkNegativeValue'.concat(' recent-order-row-sell')
             }
           >
+            <td>{row.price.toFixed(4)}</td>
             <td>
-              {row.price.toFixed(4)}
               {change !== 0 ? (
                 <span style={{ paddingLeft: '10px', textAlign: 'right' }}>
-                  {row.side === 'sell' ? (
+                  {row.side === 'buy' ? (
                     <Icon icon="caret-up" color="#4aa529" />
                   ) : (
                     <Icon icon="caret-down" color="#db3737" />
@@ -75,12 +76,13 @@ const RecentTrades = () => {
     )
   }
   return (
-    <Card>
+    <div>
       <div ref={contentRef}>
         <table className="bp3-html-table bp3-small bp3-interactive scroll">
           <thead>
             <tr>
               <th>Price</th>
+              <th>Change</th>
               <th>Quantity</th>
               <th>Time</th>
             </tr>
@@ -94,7 +96,7 @@ const RecentTrades = () => {
           </tbody>
         </table>
       </div>
-    </Card>
+    </div>
   )
 }
 

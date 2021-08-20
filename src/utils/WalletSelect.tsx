@@ -150,7 +150,7 @@ const WalletSelect = () => {
               <MenuItem text={'Sol: 234234'} />
               <MenuItem
                 href={`https://explorer.solana.com/address/${wallet?.publicKey.toBase58()}`}
-                text={'View Account on Beachs'}
+                text={'View on Explorer'}
               />
               <MenuItem onClick={() => setConnected(false)} text="Logout" icon="log-out" />
             </Menu>

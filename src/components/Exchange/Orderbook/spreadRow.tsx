@@ -1,5 +1,5 @@
 import { H5 } from '@blueprintjs/core'
-import { ESides, ISpreadData } from './'
+import { ISpreadData, ESides } from '.'
 
 const SpreadRow = ({ spreadData }: { spreadData: ISpreadData }) => {
   return (

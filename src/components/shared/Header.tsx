@@ -21,7 +21,7 @@ const Header = (): JSX.Element => {
         <Link href={'/'}>
           <NavbarHeading>
             {/* <img style={{ height: '35px' }} src="/images/logo.svg" /> */}
-            <H4>Spotlight by FC</H4>
+            <H4>Nextjs Serum</H4>
           </NavbarHeading>
         </Link>
         <Popover2 content={exchangeMenu} position={Position.BOTTOM}>
